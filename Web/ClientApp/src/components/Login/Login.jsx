@@ -24,9 +24,6 @@ class Login extends React.PureComponent {
                                 <label htmlFor="floatingPassword">Password</label>
                             </div>
                             <div className="checkbox mb-3">
-                                <label>
-                                    <input type="checkbox" value="remember-me" /> Remember me
-                                </label>
                             </div>
                             <button className="w-100 btn btn-lg btn-primary" type="button" onClick={() => { this.props.post(); }}>Sign in</button>
                             <p className="mt-5 mb-3 text-muted">© 2017–2021</p>

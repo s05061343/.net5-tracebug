@@ -34,6 +34,9 @@ export const actionCreators = {
                             authToken: data.authToken,
                             userId: data.userId,
                             password: '',
+                            name: data.name,
+                            role: data.role,
+                            roleNo: data.roleNo,
                             isAuth: data.authToken ? true : false
                         },
                     });
@@ -54,15 +57,6 @@ export const actionCreators = {
                         onScreen: true
                     }
                 });
-                //    dispatch({
-                //        type: "ERROR_MESSAGE",
-                //        user: {
-                //            authToken: '',
-                //            userId: appState.loginUser.user.userId,
-                //            password: appState.loginUser.user.password,
-                //            isAuth: false
-                //        },
-                //    });
             });
     },
 
@@ -74,6 +68,9 @@ export const actionCreators = {
                 authToken: '',
                 userId: userId,
                 password: appState.loginUser.user.password,
+                name: appState.loginUser.user.name,
+                role: appState.loginUser.user.role,
+                roleNo: appState.loginUser.user.roleNo,
                 isAuth: false
             }
         });
@@ -87,6 +84,9 @@ export const actionCreators = {
                 authToken: '',
                 userId: appState.loginUser.user.userId,
                 password: password,
+                name: appState.loginUser.user.name,
+                role: appState.loginUser.user.role,
+                roleNo: appState.loginUser.user.roleNo,
                 isAuth: false
             }
         });
@@ -101,10 +101,87 @@ export const actionCreators = {
                 authToken: '',
                 userId: '',
                 password: '',
+                name: '',
+                role: '',
+                roleNo: '',
                 isAuth: false
             }
         });
-    }
+    },
+
+    addformTitle: (title) => (dispatch, getState) => {
+        const appState = getState();
+        dispatch({
+            type: "ADD_FORM_TITLE",
+            user: {
+                authToken: appState.loginUser.user.authToken,
+                userId: appState.loginUser.user.userId,
+                password: appState.loginUser.user.password,
+                name: appState.loginUser.user.name,
+                role: appState.loginUser.user.role,
+                roleNo: appState.loginUser.user.roleNo,
+                isAuth: false,
+                formTitle: title
+            }
+        });
+    },
+
+    addformTitle: (title) => (dispatch, getState) => {
+        const appState = getState();
+        dispatch({
+            type: "ADD_FORM_TITLE",
+            user: {
+                authToken: appState.loginUser.user.authToken,
+                userId: appState.loginUser.user.userId,
+                password: appState.loginUser.user.password,
+                name: appState.loginUser.user.name,
+                role: appState.loginUser.user.role,
+                roleNo: appState.loginUser.user.roleNo,
+                isAuth: false,
+                formTitle: title,
+                formUser: appState.loginUser.user.formUser,
+                formDescription: appState.loginUser.user.formDescription,
+            }
+        });
+    },
+
+    addformUser: (user) => (dispatch, getState) => {
+        const appState = getState();
+        dispatch({
+            type: "ADD_FORM_TITLE",
+            user: {
+                authToken: appState.loginUser.user.authToken,
+                userId: appState.loginUser.user.userId,
+                password: appState.loginUser.user.password,
+                name: appState.loginUser.user.name,
+                role: appState.loginUser.user.role,
+                roleNo: appState.loginUser.user.roleNo,
+                isAuth: false,
+                formTitle: appState.loginUser.user.formTitle,
+                formUser: user,
+                formDescription: appState.loginUser.user.formDescription,
+            }
+        });
+    },
+
+    addformDescription: (description) => (dispatch, getState) => {
+        const appState = getState();
+        dispatch({
+            type: "ADD_FORM_TITLE",
+            user: {
+                authToken: appState.loginUser.user.authToken,
+                userId: appState.loginUser.user.userId,
+                password: appState.loginUser.user.password,
+                name: appState.loginUser.user.name,
+                role: appState.loginUser.user.role,
+                roleNo: appState.loginUser.user.roleNo,
+                isAuth: false,
+                formTitle: appState.loginUser.user.formTitle,
+                formUser: appState.loginUser.user.formUser,
+                formDescription: description,
+            }
+        });
+    },
 };
 
 export const reducer = (loginUser, incomingAction) => {
@@ -114,6 +191,9 @@ export const reducer = (loginUser, incomingAction) => {
                 authToken: '',
                 userId: '',
                 password: '',
+                name: '',
+                role: '',
+                roleNo: '',
                 isAuth: false
             }
         };
@@ -125,6 +205,7 @@ export const reducer = (loginUser, incomingAction) => {
         case 'SET_PASSWORD':
         case 'USER_LOGOUT':
         case 'ERROR_MESSAGE':
+        case 'ADD_FORM_TITLE':
             return {
                 user: incomingAction.user
             };

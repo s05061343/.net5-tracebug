@@ -65,3 +65,8 @@ h1 {
     /*margin: 0px;*/
     padding: 5px;
 }
+
+.form-floating > .form-select {
+    padding-top: 0.625rem !important;
+    padding-bottom: 0.625rem;
+}

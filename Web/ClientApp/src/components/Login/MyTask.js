@@ -10,11 +10,24 @@
                 isAuth: false
             }
         });
+    },
+
+    addForm: () => (dispatch, getState) => {
+        sessionStorage.removeItem('authToken');
+        dispatch({
+            type: "USER_LOGOUT",
+            user: {
+                authToken: '',
+                userId: '',
+                password: '',
+                isAuth: false
+            }
+        });
     }
 };
 
-export const reducer = (loginUser, incomingAction) => {
-    if (loginUser === undefined) {
+export const reducer = (taskform, incomingAction) => {
+    if (taskform === undefined) {
         return {
             user: {
                 authToken: '',
@@ -34,7 +47,7 @@ export const reducer = (loginUser, incomingAction) => {
                 user: action.user
             };
         default:
-            return loginUser;
+            return taskform;
     }
 };
 

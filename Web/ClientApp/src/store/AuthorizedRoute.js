@@ -9,7 +9,7 @@ class AuthorizedRoute extends React.Component {
         
         if (isAuth && this.props.location.pathname === '/login') {
             return (
-                <Redirect to="/logout" />
+                <Redirect to="/" />
             )
         }
 

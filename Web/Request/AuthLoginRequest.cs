@@ -11,6 +11,5 @@ namespace Web.Request
         public string userId { get; set; }
         [Required]
         public string password { get; set; }
-        public List<IFormFile> imageset { get; set; }
     }
 }

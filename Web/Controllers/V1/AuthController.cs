@@ -26,34 +26,30 @@ namespace Web.Controllers.V1
         [AllowAnonymous]
         [HttpPost]
         public IActionResult Login(
-            [FromServices] IAuthManager authService,
-            [ModelBinder(typeof(RequestBodyBinding))] string userId,
-            [ModelBinder(typeof(RequestBodyBinding))] string password,
-            [ModelBinder(typeof(RequestBodyBinding))] List<IFormFile> imageset)
-        {
-            var token = authService.Login(userId);
-            return this.Ok(new
-            {
-                varsion = _version,
-                userId = userId,
-                password = password,
-                imageset = imageset,
-                authToken = token
-            });
-        }
-
-        [HttpPost]
-        public IActionResult Query(
             [FromServices] DbContext dbContext,
-            [ModelBinder(typeof(AuthQuseryBinder))] AuthLoginRequest request)
+            [FromServices] IAuthManager authService,
+            [ModelBinder(typeof(RequestBodyBinding))] AuthLoginRequest request)
         {
-            var vo = dbContext.Set<Model.Sqlite.SQLiteContext>().Find(request.userId);
-            return this.Ok(new
+            var token = authService.Login(request.userId);
+            var vo = dbContext.Set<Model.Sqlite.LoginUser>().Find(request.userId);
+            var roles = dbContext.Set<Model.Sqlite.RoleType>().ToList();
+            if (vo != null)
             {
-                varsion = _version,
-                request = request,
-                vo = vo
-            });
+                return this.Ok(new
+                {
+                    varsion = _version,
+                    userId = vo.UserId,
+                    password = vo.Password,
+                    name = vo.Name,
+                    roleNo = vo.RoleNo,
+                    role = roles.Where(p => p.Id == vo.RoleNo).Any() ? roles.Where(p => p.Id == vo.RoleNo).FirstOrDefault().Name : string.Empty,
+                    authToken = token
+                });
+            }
+            else
+            {
+                return this.BadRequest();
+            }
         }
     }
 }

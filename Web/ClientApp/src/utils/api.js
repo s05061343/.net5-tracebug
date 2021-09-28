@@ -6,8 +6,8 @@ const userRequest = axios.create({
 });
 
 // User 相關的 api
-export const apiUserLogin = data => userRequest.post('/auth/default/login', data);
-export const apiUserLoginCheck = data => userRequest.post('/auth/default/CookieLogin', data);
+export const apiUserLogin = data => userRequest.post('/auth/v1/login', data);
+export const apiUserLoginCheck = data => userRequest.post('/auth/v1/CookieLogin', data);
 export async function getApiUserLoginCheck() {
     try {
         const item = await apiUserLoginCheck({});

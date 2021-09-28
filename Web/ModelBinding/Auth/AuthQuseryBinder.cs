@@ -12,7 +12,7 @@ namespace Web.ModelBinding.Auth
         {
             var model = this.BindModelFromBody<AuthLoginRequest>(bindingContext);
             var formFiles = bindingContext.HttpContext.Request.Form.Files;
-            model.imageset = this.ProccessFile(formFiles);
+            //model.imageset = this.ProccessFile(formFiles);
             bindingContext.Result = ModelBindingResult.Success(model);
             return Task.CompletedTask;
         }

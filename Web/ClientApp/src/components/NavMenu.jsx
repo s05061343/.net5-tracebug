@@ -22,13 +22,13 @@ class NavMenu extends React.PureComponent {
                         <NavbarToggler onClick={this.toggle} className="navbar-toggler p-0 border-0" data-bs-toggle="offcanvas" aria-label="Toggle navigation" >
                             <span className="navbar-toggler-icon"></span>
                         </NavbarToggler>
-                        <NavbarBrand tag={Link} to="/shortenurl">
-                            Tomz.s
+                        <NavbarBrand tag={Link} to="/home">
+                            Trace.bug
                         </NavbarBrand>
                         <Collapse className="navbar-collapse offcanvas-collapse" isOpen={this.state.isOpen} >
                             <ul className="navbar-nav me-auto mb-2 mb-lg-0 s-menu">
                                 <NavItem className="s-item">
-                                    <NavLink tag={Link} to="/home">聯絡我們</NavLink>
+                                    <NavLink tag={Link} to="/logout">我的任務</NavLink>
                                 </NavItem>
                             </ul>
                         </Collapse>
@@ -37,18 +37,18 @@ class NavMenu extends React.PureComponent {
                 {/*<div className="nav-scroller bg-white shadow-sm">*/}
                 {/*    <nav className="nav nav-underline" aria-label="Secondary navigation">*/}
                 {/*        <a className="nav-link active" aria-current="page" href="/#">縮網址</a>*/}
-                {/*        */}{/*<a className="nav-link active" aria-current="page" href="/#">Dashboard</a>*/}
-                {/*        */}{/*<a className="nav-link" href="/#">*/}
-                {/*        */}{/*    Friends*/}
-                {/*        */}{/*    <span className="badge bg-light text-dark rounded-pill align-text-bottom">27</span>*/}
-                {/*        */}{/*</a>*/}
-                {/*        */}{/*<a className="nav-link" href="/#">Explore</a>*/}
-                {/*        */}{/*<a className="nav-link" href="/#">Suggestions</a>*/}
-                {/*        */}{/*<a className="nav-link" href="/#">Link</a>*/}
-                {/*        */}{/*<a className="nav-link" href="/#">Link</a>*/}
-                {/*        */}{/*<a className="nav-link" href="/#">Link</a>*/}
-                {/*        */}{/*<a className="nav-link" href="/#">Link</a>*/}
-                {/*        */}{/*<a className="nav-link" href="/#">Link</a>*/}
+                {/*        <a className="nav-link active" aria-current="page" href="/#">Dashboard</a>*/}
+                {/*        <a className="nav-link" href="/#">*/}
+                {/*            Friends*/}
+                {/*            <span className="badge bg-light text-dark rounded-pill align-text-bottom">27</span>*/}
+                {/*        </a>*/}
+                {/*        <a className="nav-link" href="/#">Explore</a>*/}
+                {/*        <a className="nav-link" href="/#">Suggestions</a>*/}
+                {/*        <a className="nav-link" href="/#">Link</a>*/}
+                {/*        <a className="nav-link" href="/#">Link</a>*/}
+                {/*        <a className="nav-link" href="/#">Link</a>*/}
+                {/*        <a className="nav-link" href="/#">Link</a>*/}
+                {/*        <a className="nav-link" href="/#">Link</a>*/}
                 {/*    </nav>*/}
                 {/*</div>*/}
             </div >

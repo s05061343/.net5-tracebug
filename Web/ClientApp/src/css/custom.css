@@ -70,3 +70,12 @@ h1 {
     padding-top: 0.625rem !important;
     padding-bottom: 0.625rem;
 }
+
+.form-control {
+    padding-top: 0.325rem !important;
+    padding-bottom: 0.325rem;
+}
+
+textarea.form-control {
+    height: 300px
+}

@@ -10,6 +10,7 @@ namespace Model.Sqlite
     {
         [Key]
         public int Id { get; set; }
+        public int Type { get; set; }
         public int BelongToProgress { get; set; }
         public string Name { get; set; }
         public string BelongToLoginUser { get; set; }

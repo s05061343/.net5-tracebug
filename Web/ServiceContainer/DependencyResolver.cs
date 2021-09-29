@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Service.Auth;
 using Service.Auth.Token;
+using Service.TaskForm;
 using Web.Filters;
 using Web.Vaildations.Auth;
 
@@ -29,6 +30,7 @@ namespace Web.ServiceContainer
             services.AddScoped<JWT>();
             services.AddScoped<AuthorizationFilter>();
             services.AddScoped<ExceptionFilter>();
+            services.AddScoped<ITaskFormService, TaskFormService>();
         }
 
         private static void InitValidator(IServiceCollection services)

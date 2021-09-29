@@ -1,5 +1,5 @@
 ﻿import { store } from 'react-notifications-component';
-import { apiUserLogin } from '../../utils/api.js';
+import { apiUserLogin, apiAddTaskForm, apiQueryTaskForm, apiDeleteTaskForm, apiChangePrgressTaskForm, apiQueryAsignTaskForm } from '../../utils/api.js';
 
 export const actionCreators = {
     post: () => (dispatch, getState) => {
@@ -59,7 +59,6 @@ export const actionCreators = {
                 });
             });
     },
-
     setUserId: (userId) => (dispatch, getState) => {
         const appState = getState();
         dispatch({
@@ -75,7 +74,6 @@ export const actionCreators = {
             }
         });
     },
-
     setPassword: (password) => (dispatch, getState) => {
         const appState = getState();
         dispatch({
@@ -91,7 +89,6 @@ export const actionCreators = {
             }
         });
     },
-
     logout: () => (dispatch, getState) => {
         sessionStorage.removeItem('authToken');
         document.cookie = "AuthToken=; path=/;";
@@ -113,78 +110,179 @@ export const actionCreators = {
         const appState = getState();
         dispatch({
             type: "ADD_FORM_TITLE",
-            user: {
-                authToken: appState.loginUser.user.authToken,
-                userId: appState.loginUser.user.userId,
-                password: appState.loginUser.user.password,
-                name: appState.loginUser.user.name,
-                role: appState.loginUser.user.role,
-                roleNo: appState.loginUser.user.roleNo,
-                isAuth: false,
-                formTitle: title
+            form: {
+                name: title,
+                belongToLoginUser: appState.taskform_add.form.belongToLoginUser,
+                description: appState.taskform_add.form.description,
+                type: appState.taskform_add.form.type,
             }
         });
     },
-
-    addformTitle: (title) => (dispatch, getState) => {
-        const appState = getState();
-        dispatch({
-            type: "ADD_FORM_TITLE",
-            user: {
-                authToken: appState.loginUser.user.authToken,
-                userId: appState.loginUser.user.userId,
-                password: appState.loginUser.user.password,
-                name: appState.loginUser.user.name,
-                role: appState.loginUser.user.role,
-                roleNo: appState.loginUser.user.roleNo,
-                isAuth: false,
-                formTitle: title,
-                formUser: appState.loginUser.user.formUser,
-                formDescription: appState.loginUser.user.formDescription,
-            }
-        });
-    },
-
     addformUser: (user) => (dispatch, getState) => {
         const appState = getState();
+        console.log(user);
         dispatch({
-            type: "ADD_FORM_TITLE",
-            user: {
-                authToken: appState.loginUser.user.authToken,
-                userId: appState.loginUser.user.userId,
-                password: appState.loginUser.user.password,
-                name: appState.loginUser.user.name,
-                role: appState.loginUser.user.role,
-                roleNo: appState.loginUser.user.roleNo,
-                isAuth: false,
-                formTitle: appState.loginUser.user.formTitle,
-                formUser: user,
-                formDescription: appState.loginUser.user.formDescription,
+            type: "ADD_FORM_USER",
+            form: {
+                name: appState.taskform_add.form.name,
+                belongToLoginUser: user,
+                description: appState.taskform_add.form.description,
+                type: appState.taskform_add.form.type,
             }
         });
     },
-
     addformDescription: (description) => (dispatch, getState) => {
         const appState = getState();
         dispatch({
-            type: "ADD_FORM_TITLE",
-            user: {
-                authToken: appState.loginUser.user.authToken,
-                userId: appState.loginUser.user.userId,
-                password: appState.loginUser.user.password,
-                name: appState.loginUser.user.name,
-                role: appState.loginUser.user.role,
-                roleNo: appState.loginUser.user.roleNo,
-                isAuth: false,
-                formTitle: appState.loginUser.user.formTitle,
-                formUser: appState.loginUser.user.formUser,
-                formDescription: description,
+            type: "ADD_FORM_DESCRIPTION",
+            form: {
+                name: appState.taskform_add.form.name,
+                belongToLoginUser: appState.taskform_add.form.belongToLoginUser,
+                description: description,
+                type: appState.taskform_add.form.type,
             }
         });
     },
+    addformType: (type) => (dispatch, getState) => {
+        const appState = getState();
+        dispatch({
+            type: "ADD_FORM_TYPE",
+            form: {
+                name: appState.taskform_add.form.name,
+                belongToLoginUser: appState.taskform_add.form.belongToLoginUser,
+                description: appState.taskform_add.form.description,
+                type: type,
+            }
+        });
+    },
+
+    postFormAdd: () => (dispatch, getState) => {
+        const appState = getState();
+        const json = {
+            name: appState.taskform_add.form.name,
+            belongToLoginUser: appState.taskform_add.form.belongToLoginUser,
+            description: appState.taskform_add.form.description,
+            userId: appState.loginUser.user.userId,
+            type: appState.taskform_add.form.type,
+        };
+        console.log(json)
+        apiAddTaskForm(json)
+            .then(res => {
+                console.log(res);
+                if (res.status === 200) {
+                    apiQueryTaskForm({ userId: appState.loginUser.user.userId })
+                        .then(res => {
+                            if (res.status === 200) {
+                                dispatch({
+                                    type: "QUERY_FORM",
+                                    formdata: {
+                                        belong: JSON.parse(res.request.response).data.belong,
+                                        asign: JSON.parse(res.request.response).data.asign
+                                    }
+                                });
+                            }
+                        })
+                        .catch(err => { console.log(err); return; });
+                    store.addNotification({
+                        message: "新增成功",
+                        type: "success",
+                        insert: "top",
+                        container: "top-right",
+                        animationIn: ["animate__animated", "animate__fadeIn"],
+                        animationOut: ["animate__animated", "animate__fadeOut"],
+                        dismiss: {
+                            duration: 5000,
+                            onScreen: true
+                        }
+                    });
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                store.addNotification({
+                    message: "新增失敗",
+                    type: "warning",
+                    insert: "top",
+                    container: "top-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true
+                    }
+                });
+                return;
+            });
+    },
+    postFormQuery: () => (dispatch, getState) => {
+        const appState = getState();
+        const json = { userId: appState.loginUser.user.userId };
+        console.log(json)
+        apiQueryTaskForm(json)
+            .then(res => {
+                if (res.status === 200) {
+                    dispatch({
+                        type: "QUERY_FORM",
+                        formdata: {
+                            belong: JSON.parse(res.request.response).data.belong,
+                            asign: JSON.parse(res.request.response).data.asign
+                        }
+                    });
+                }
+            })
+            .catch(err => { console.log(err); return; });
+    },
+    postFormDelete: (id) => (dispatch, getState) => {
+        const appState = getState();
+        const json = { id: id };
+        console.log(json)
+        apiDeleteTaskForm(json)
+            .then(res => {
+                console.log(res);
+                apiQueryTaskForm({ userId: appState.loginUser.user.userId })
+                    .then(res => {
+                        if (res.status === 200) {
+                            dispatch({
+                                type: "QUERY_FORM",
+                                formdata: {
+                                    belong: JSON.parse(res.request.response).data.belong,
+                                    asign: JSON.parse(res.request.response).data.asign
+                                }
+                            });
+                        }
+                    })
+                    .catch(err => { console.log(err); return; });
+            })
+            .catch(err => { console.log(err); return; });
+    },
+
+    postFormChangeProgress: (id, progressNo) => (dispatch, getState) => {
+        const appState = getState();
+        const json = { id: id, progressNo: progressNo };
+        console.log(json)
+        apiChangePrgressTaskForm(json)
+            .then(res => {
+                console.log(res);
+                apiQueryTaskForm({ userId: appState.loginUser.user.userId })
+                    .then(res => {
+                        if (res.status === 200) {
+                            dispatch({
+                                type: "QUERY_FORM",
+                                formdata: {
+                                    belong: JSON.parse(res.request.response).data.belong,
+                                    asign: JSON.parse(res.request.response).data.asign
+                                }
+                            });
+                        }
+                    })
+                    .catch(err => { console.log(err); return; });
+            })
+            .catch(err => { console.log(err); return; });
+    },
+
 };
 
-export const reducer = (loginUser, incomingAction) => {
+export const reducer_loginUser = (loginUser, incomingAction) => {
     if (loginUser === undefined) {
         return {
             user: {
@@ -205,7 +303,6 @@ export const reducer = (loginUser, incomingAction) => {
         case 'SET_PASSWORD':
         case 'USER_LOGOUT':
         case 'ERROR_MESSAGE':
-        case 'ADD_FORM_TITLE':
             return {
                 user: incomingAction.user
             };
@@ -213,4 +310,46 @@ export const reducer = (loginUser, incomingAction) => {
             return loginUser;
     }
 };
+export const reducer_taskform_add = (taskform_add, incomingAction) => {
+    if (taskform_add === undefined) {
+        return {
+            form: {
+                name: '',
+                belongToLoginUser: '',
+                description: '',
+            }
+        };
+    }
 
+    switch (incomingAction.type) {
+        case 'ADD_FORM':
+        case 'ADD_FORM_TITLE':
+        case 'ADD_FORM_USER':
+        case 'ADD_FORM_DESCRIPTION':
+        case 'ADD_FORM_TYPE':
+            return {
+                form: incomingAction.form
+            };
+        default:
+            return taskform_add;
+    }
+};
+export const reducer_taskform_query = (taskform_query, incomingAction) => {
+    if (taskform_query === undefined) {
+        return {
+            formdata: {
+                belong: [],
+                asign: []
+            }
+        };
+    }
+
+    switch (incomingAction.type) {
+        case 'QUERY_FORM':
+            return {
+                formdata: incomingAction.formdata
+            };
+        default:
+            return taskform_query;
+    }
+};

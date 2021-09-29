@@ -2,23 +2,12 @@
 
 // User相關的 api
 const userRequest = axios.create({
-    baseURL: '/'
+    baseURL: '/',
 });
 
 // User 相關的 api
 export const apiUserLogin = data => userRequest.post('/auth/v1/login', data);
-export const apiUserLoginCheck = data => userRequest.post('/auth/v1/CookieLogin', data);
-export async function getApiUserLoginCheck() {
-    try {
-        const item = await apiUserLoginCheck({});
-        return item;
-    } catch (err) {
-        console.error(err);
-        sessionStorage.removeItem("authToken");
-    }
-}
-
-const shortenRequest = axios.create({
-    baseURL: 'https://tomz-shorten-url.herokuapp.com',
-});
-export const apiShortenUrl = data => shortenRequest.post('/urlshortemer/default/shorten', data);
+export const apiAddTaskForm = data => userRequest.post('/task/v1/Insert', data, { withCredentials: true });
+export const apiQueryTaskForm = data => userRequest.post('/task/v1/Query', data, { withCredentials: true });
+export const apiDeleteTaskForm = data => userRequest.post('/task/v1/Delete', data, { withCredentials: true });
+export const apiChangePrgressTaskForm = data => userRequest.post('/task/v1/ChangeProgress', data, { withCredentials: true });

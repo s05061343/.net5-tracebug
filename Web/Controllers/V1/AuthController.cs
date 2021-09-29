@@ -35,6 +35,7 @@ namespace Web.Controllers.V1
             var roles = dbContext.Set<Model.Sqlite.RoleType>().ToList();
             if (vo != null)
             {
+                Response.Cookies.Append("AuthToken", token);
                 return this.Ok(new
                 {
                     varsion = _version,

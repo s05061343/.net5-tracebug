@@ -22,13 +22,13 @@ class NavMenu extends React.PureComponent {
                         <NavbarToggler onClick={this.toggle} className="navbar-toggler p-0 border-0" data-bs-toggle="offcanvas" aria-label="Toggle navigation" >
                             <span className="navbar-toggler-icon"></span>
                         </NavbarToggler>
-                        <NavbarBrand tag={Link} to="/home">
+                        <NavbarBrand tag={Link} to="/logout">
                             Trace.bug
                         </NavbarBrand>
                         <Collapse className="navbar-collapse offcanvas-collapse" isOpen={this.state.isOpen} >
                             <ul className="navbar-nav me-auto mb-2 mb-lg-0 s-menu">
                                 <NavItem className="s-item">
-                                    <NavLink tag={Link} to="/logout">我的任務</NavLink>
+                                    <NavLink tag={Link} to="/home" style={{ display: [1, 2, 3].includes(this.props.user.roleNo) ? 'none' : '' }}>管理員選單</NavLink>
                                 </NavItem>
                             </ul>
                         </Collapse>

@@ -33,12 +33,17 @@ namespace Model.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "錯誤解決"
+                            Name = "Bug Report"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "功能請求"
+                            Name = "Feature Request"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Test Case"
                         });
                 });
 
@@ -61,6 +66,13 @@ namespace Model.Migrations
                     b.ToTable("LoginUser");
 
                     b.HasData(
+                        new
+                        {
+                            UserId = "admin",
+                            Name = "管理員",
+                            Password = "admin",
+                            RoleNo = 4
+                        },
                         new
                         {
                             UserId = "ts001",
@@ -157,6 +169,11 @@ namespace Model.Migrations
                         {
                             Id = 3,
                             Name = "PM"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Administrator"
                         });
                 });
 

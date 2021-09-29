@@ -22,7 +22,8 @@ namespace Service.TaskForm
 
         public void SetBelongUser(string userId)
         {
-            _userId = userId;
+            if (userId != "admin")
+                _userId = userId;
         }
 
         public IEnumerable<Model.Sqlite.TaskForm> Query()
@@ -104,7 +105,8 @@ namespace Service.TaskForm
 
         public void SetAsignUser(string userId)
         {
-            _asignUserId = userId;
+            if (userId != "admin")
+                _asignUserId = userId;
         }
     }
 }

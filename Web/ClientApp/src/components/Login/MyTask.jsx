@@ -35,7 +35,7 @@ class MyTask extends React.PureComponent {
                                     <h1 className="fw-bold">派出任務</h1>
                                 </div>
                                 <div>
-                                    <button type="button" className="btn btn-primary" onClick={this.toggle}>新增表單</button>
+                                    <button type="button" className="btn btn-primary" onClick={this.toggle}>新增任務</button>
                                 </div>
                             </div>
                         </div>
@@ -145,11 +145,11 @@ class MyTask extends React.PureComponent {
                                 <select className="form-select"
                                     style={{ fontSize: '20px' }}
                                     aria-label="Default select example"
-                                    disabled={this.props.loginUser.user.roleNo !== 3}
                                     onChange={(e) => { this.props.addformType(e.target.value); }}
                                 >
-                                    <option value="1">錯誤回報</option>
-                                    <option value="2">功能請求</option>
+                                    <option value="1">Bug Report</option>
+                                    <option value="2" disabled={[1, 2].includes(this.props.loginUser.user.roleNo)}>Feature Request</option>
+                                    <option value="3" disabled={[2, 3].includes(this.props.loginUser.user.roleNo)}>Test Case</option>
                                 </select>
                             </div>
                             <div className="form-floating mb-3">

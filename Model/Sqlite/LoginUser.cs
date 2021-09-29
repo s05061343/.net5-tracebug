@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace Model.Sqlite
 {
-    public class ShortUrlTable
+    public class LoginUser
     {
         [Key]
-        public string Id { get; set; }
-        public string Url { get; set; }
-        public DateTime? Expired { get; set; }
+        public string UserId { get; set; }
+        public string Password { get; set; }
+        public string Name { get; set; }
+        public int RoleNo { get; set; }
     }
 }

@@ -25,5 +25,11 @@ namespace Service.TaskForm
         public Model.Sqlite.TaskForm ChangeProgress(int taskId, int progressNo);
 
         public Model.Sqlite.TaskForm ChangePriority(int taskId, int priorityNo);
+
+        public Model.Sqlite.LoginUser AddUser(
+            string userid,
+            string password,
+            string name,
+            int role);
     }
 }

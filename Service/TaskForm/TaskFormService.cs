@@ -183,5 +183,31 @@ namespace Service.TaskForm
             if (userId != "admin")
                 _asignUserId = userId;
         }
+
+        public Model.Sqlite.LoginUser AddUser(
+            string userid,
+            string password,
+            string name,
+            int role)
+        {
+            try
+            {
+                var vo = new Model.Sqlite.LoginUser
+                {
+                    UserId = userid,
+                    Password = password,
+                    Name = name,
+                    RoleNo = role
+                };
+                _dbContext.Set<Model.Sqlite.LoginUser>().Add(vo);
+                _dbContext.SaveChanges();
+                return vo;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"@{ex}");
+                return null;
+            }
+        }
     }
 }

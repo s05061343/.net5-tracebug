@@ -29,31 +29,9 @@ namespace Web.Controllers.V1
             public string userId { get; set; }
         }
 
-        //public class CTaskForm
-        //{
-        //    public int Id { get; set; }
-        //    public int Priority { get; set; }
-        //    public string PriorityName { get; set; }
-        //    public int Type { get; set; }
-        //    public string TypeName { get; set; }
-        //    public int BelongToProgress { get; set; }
-        //    public string BelongToProgressName { get; set; }
-        //    public string Name { get; set; }
-        //    public string BelongToLoginUser { get; set; }
-        //    public string BelongToLoginUserName { get; set; }
-        //    public string Description { get; set; }
-        //    public DateTime? CreateDate { get; set; }
-        //    public string CreateBy { get; set; }
-        //    public string CreateByName { get; set; }
-        //    public DateTime? UpdateDate { get; set; }
-        //    public string UpdateBy { get; set; }
-        //    public string UpdateByName { get; set; }
-        //}
-
         [HttpPost]
         public IActionResult Query(
             [FromServices] ITaskFormService _service,
-            [FromServices] DbContext _dbContext,
             [FromBody] QueryRequest request)
         {
             _service.SetBelongUser(request.userId);
@@ -204,6 +182,39 @@ namespace Web.Controllers.V1
                         prioritys = prioritys
                     }
                 });
+            }
+            else
+            {
+                return this.BadRequest();
+            }
+        }
+
+        public class AddUserRequest
+        {
+            [Required]
+            public string userid { get; set; }
+            [Required]
+            public string password { get; set; }
+            [Required]
+            public string name { get; set; }
+            [Required]
+            public int role { get; set; }
+        }
+
+        [HttpPost]
+        public IActionResult AddUser(
+            [FromServices] ITaskFormService _service,
+            [FromBody] AddUserRequest request)
+        {
+            var vo = _service.AddUser(
+                request.userid,
+                request.password,
+                request.name,
+                request.role);
+
+            if (vo != null)
+            {
+                return this.Ok();
             }
             else
             {

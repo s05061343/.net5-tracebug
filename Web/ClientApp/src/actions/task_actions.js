@@ -1,5 +1,5 @@
 ﻿import { store } from 'react-notifications-component';
-import { apiUserLogin, apiAddTaskForm, apiQueryTaskForm, apiDeleteTaskForm, apiChangePrgressTaskForm, apiCommon, apiChangePriorityTaskForm } from '../utils/api.js';
+import { apiUserLogin, apiAddTaskForm, apiQueryTaskForm, apiDeleteTaskForm, apiChangePrgressTaskForm, apiCommon, apiChangePriorityTaskForm, apiAddUser } from '../utils/api.js';
 
 export const actionCreators = {
     post: () => (dispatch, getState) => {
@@ -339,10 +339,115 @@ export const actionCreators = {
             .catch(err => { console.log(err); return; });
     },
 
+    postAddUser: () => (dispatch, getState) => {
+        const appState = getState();
+        apiAddUser({
+            userId: appState.newUser.user.userId,
+            password: appState.newUser.user.password,
+            role: appState.newUser.user.role,
+            name: appState.newUser.user.name
+        })
+            .then(res => {
+                console.log(res);
+                if (res.status === 200) {
+                    store.addNotification({
+                        message: "新增成功",
+                        type: "success",
+                        insert: "top",
+                        container: "top-right",
+                        animationIn: ["animate__animated", "animate__fadeIn"],
+                        animationOut: ["animate__animated", "animate__fadeOut"],
+                        dismiss: {
+                            duration: 5000,
+                            onScreen: true
+                        }
+                    });
+                    dispatch({
+                        type: "SET_CLEAR",
+                        user: {
+                            userId: '',
+                            password: '',
+                            role: '',
+                            name: ''
+                        }
+                    });
+                }
+                
+            })
+            .catch(err => {
+                console.log(err);
+                store.addNotification({
+                    message: "新增失敗",
+                    type: "warning",
+                    insert: "top",
+                    container: "top-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true
+                    }
+                });
+                return;
+            });
+    },
+
+    setNewUserId: (userId) => (dispatch, getState) => {
+        const appState = getState();
+        dispatch({
+            type: "SET_NEW_USERID",
+            user: {
+                userId: userId,
+                password: appState.newUser.user.password,
+                role: appState.newUser.user.role,
+                name: appState.newUser.user.name
+            }
+        });
+    },
+
+    setNewPassword: (password) => (dispatch, getState) => {
+        const appState = getState();
+        dispatch({
+            type: "SET_NEW_PASSWORD",
+            user: {
+                userId: appState.newUser.user.userId,
+                password: password,
+                role: appState.newUser.user.role,
+                name: appState.newUser.user.name
+            }
+        });
+    },
+
+    setNewRole: (role) => (dispatch, getState) => {
+        const appState = getState();
+        dispatch({
+            type: "SET_NEW_ROLE",
+            user: {
+                userId: appState.newUser.user.userId,
+                password: appState.newUser.user.password,
+                role: role,
+                name: appState.newUser.user.name
+            }
+        });
+    },
+
+    setNewName: (name) => (dispatch, getState) => {
+        const appState = getState();
+        dispatch({
+            type: "SET_NEW_NAME",
+            user: {
+                userId: appState.newUser.user.userId,
+                password: appState.newUser.user.password,
+                role: appState.newUser.user.role,
+                name: name
+            }
+        });
+    },
 };
 
 export const reducer_loginUser = (loginUser, incomingAction) => {
     if (loginUser === undefined) {
+        sessionStorage.clear();
         return {
             user: {
                 authToken: '',
@@ -433,5 +538,29 @@ export const reducer_common = (common, incomingAction) => {
             };
         default:
             return common;
+    }
+};
+export const reducer_newUser = (newUser, incomingAction) => {
+    if (newUser === undefined) {
+        return {
+            user: {
+                userId: '',
+                password: '',
+                role: '',
+            }
+        };
+    }
+
+    switch (incomingAction.type) {
+        case 'SET_NEW_USERID':
+        case 'SET_NEW_PASSWORD':
+        case 'SET_NEW_ROLE':
+        case 'SET_NEW_NAME':
+        case 'SET_CLEAR':
+            return {
+                user: incomingAction.user
+            };
+        default:
+            return newUser;
     }
 };

@@ -5,5 +5,6 @@ import * as Login from '../components/Login/Login.js';
 export const reducers = {
     loginUser: Login.reducer_loginUser,
     taskform_add: Login.reducer_taskform_add,
-    taskform_query: Login.reducer_taskform_query
+    taskform_query: Login.reducer_taskform_query,
+    common: Login.reducer_common
 };

@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import * as store from '../Login/Login.js';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
-class MyTask extends React.PureComponent {
+class TaskDashboard extends React.PureComponent {
     state = {
         isOpen: false,
-        belong: this.props.postFormQuery()
+        belong: this.props.postFormQuery(),
+        commen: this.props.postCommon()
     };
 
     render() {
@@ -44,6 +45,7 @@ class MyTask extends React.PureComponent {
                                 <thead>
                                     <tr style={{ textAlign: 'center' }}>
                                         <th scope="col">名稱</th>
+                                        <th scope="col">優先</th>
                                         <th scope="col">類別</th>
                                         <th scope="col">進度</th>
                                         <th scope="col">負責人</th>
@@ -54,7 +56,19 @@ class MyTask extends React.PureComponent {
                                 <tbody>
                                     {this.props.taskform_query.formdata.asign.map(item => (
                                         <tr key={item.id} style={{ textAlign: 'center', backgroundColor: item.belongToProgress === 3 ? "lightgrey" : "" }}>
-                                            <td style={{ width: "20%" }}>{item.name}</td>
+                                            <td style={{ width: "10%" }}>{item.name}</td>
+                                            <td style={{ width: "15%" }}>
+                                                <select className="form-select"
+                                                    style={{ fontSize: '15px' }}
+                                                    aria-label="Default select example"
+                                                    value={item.priority}
+                                                    onChange={(e) => { this.props.postFormChangePriority(item.id, e.target.value); }}
+                                                >
+                                                    {this.props.common.prioritys.map(item => (
+                                                        <option key={item.id} value={item.id}>{item.name}</option>
+                                                    ))}
+                                                </select>
+                                            </td>
                                             <td style={{ width: "10%" }}>{item.typeName}</td>
                                             <td style={{ width: "15%" }}>
                                                 <select className="form-select"
@@ -63,14 +77,14 @@ class MyTask extends React.PureComponent {
                                                     value={item.belongToProgress}
                                                     onChange={(e) => { this.props.postFormChangeProgress(item.id, e.target.value); }}
                                                 >
-                                                    <option value="1">新專案</option>
-                                                    <option value="2">進行中</option>
-                                                    <option value="3">已完成</option>
+                                                    {this.props.common.progress.map(item => (
+                                                        <option key={item.id} value={item.id}>{item.name}</option>
+                                                    ))}
                                                 </select>
                                             </td>
                                             <td style={{ width: "10%" }}>{item.belongToLoginUserName}</td>
                                             <td style={{ textAlign: "left" }}>{item.description}</td>
-                                            <td style={{ width: "10%" }}><button type="button" className="btn btn-primary" onClick={() => { this.props.postFormDelete(item.id); }} disabled={this.props.loginUser.user.roleNo === 1}>刪除</button></td>
+                                            <td style={{ width: "10%" }}><button type="button" className="btn btn-primary" onClick={() => { this.props.postFormDelete(item.id); }} disabled={[2].includes(this.props.loginUser.user.roleNo)}>刪除</button></td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -90,6 +104,7 @@ class MyTask extends React.PureComponent {
                                 <thead>
                                     <tr style={{ textAlign: 'center' }}>
                                         <th scope="col">名稱</th>
+                                        <th scope="col">優先</th>
                                         <th scope="col">類別</th>
                                         <th scope="col">進度</th>
                                         <th scope="col">發起人</th>
@@ -100,7 +115,19 @@ class MyTask extends React.PureComponent {
                                 <tbody>
                                     {this.props.taskform_query.formdata.belong.map(item => (
                                         <tr key={item.id} style={{ textAlign: 'center', backgroundColor: item.belongToProgress === 3 ? "lightgrey" : "" }}>
-                                            <td style={{ width: "20%" }}>{item.name}</td>
+                                            <td style={{ width: "10%" }}>{item.name}</td>
+                                            <td style={{ width: "15%" }}>
+                                                <select className="form-select"
+                                                    style={{ fontSize: '15px' }}
+                                                    aria-label="Default select example"
+                                                    value={item.priority}
+                                                    onChange={(e) => { this.props.postFormChangePriority(item.id, e.target.value); }}
+                                                >
+                                                    {this.props.common.prioritys.map(item => (
+                                                        <option key={item.id} value={item.id}>{item.name}</option>
+                                                    ))}
+                                                </select>
+                                            </td>
                                             <td style={{ width: "10%" }}>{item.typeName}</td>
                                             <td style={{ width: "15%" }}>
                                                 <select className="form-select"
@@ -109,14 +136,14 @@ class MyTask extends React.PureComponent {
                                                     value={item.belongToProgress}
                                                     onChange={(e) => { this.props.postFormChangeProgress(item.id, e.target.value); }}
                                                 >
-                                                    <option value="1">新專案</option>
-                                                    <option value="2">進行中</option>
-                                                    <option value="3">已完成</option>
+                                                    {this.props.common.progress.map(item => (
+                                                        <option key={item.id} value={item.id}>{item.name}</option>
+                                                    ))}
                                                 </select>
                                             </td>
                                             <td style={{ width: "10%" }}>{item.createByName}</td>
                                             <td style={{ textAlign: "left" }}>{item.description}</td>
-                                            <td style={{ width: "10%" }}><button type="button" className="btn btn-primary" onClick={() => { this.props.postFormDelete(item.id); }} disabled={this.props.loginUser.user.roleNo === 1}>刪除</button></td>
+                                            <td style={{ width: "10%" }}><button type="button" className="btn btn-primary" onClick={() => { this.props.postFormDelete(item.id); }} disabled={[2].includes(this.props.loginUser.user.roleNo)}>刪除</button></td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -133,11 +160,12 @@ class MyTask extends React.PureComponent {
                             </div>
                             <div className="form-floating mb-3">
                                 任務重要度 :
-                                <select className="form-select" style={{ fontSize: '20px' }} aria-label="Default select example">
-                                    <option value="">請選擇...</option>
-                                    <option value="1">緊急</option>
-                                    <option value="2">優先</option>
-                                    <option value="3">一般</option>
+                                <select className="form-select"
+                                    style={{ fontSize: '20px' }}
+                                    aria-label="Default select example"
+                                    onChange={(e) => { this.props.addformPriority(e.target.value); }}
+                                >
+                                    {this.props.common.prioritys.map(item => (<option key={item.id} value={item.id}>{item.name}</option>))}
                                 </select>
                             </div>
                             <div className="form-floating mb-3">
@@ -159,10 +187,9 @@ class MyTask extends React.PureComponent {
                                     aria-label="Default select example"
                                     onChange={(e) => { this.props.addformUser(e.target.value); }}
                                 >
-                                    <option value="">請選擇...</option>
-                                    <option value="ts001">王曉明</option>
-                                    <option value="ts002">劉俊麟</option>
-                                    <option value="ts003">金城武</option>
+                                    {this.props.common.users.map(item => (
+                                        <option key={item.userId} value={item.userId}> {item.name}</option>
+                                    ))}
                                 </select>
                             </div>
                             <div className="form-floating mb-3">
@@ -189,4 +216,4 @@ class MyTask extends React.PureComponent {
     }
 };
 
-export default connect((state) => state, store.actionCreators)(MyTask);
+export default connect((state) => state, store.actionCreators)(TaskDashboard);

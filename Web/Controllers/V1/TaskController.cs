@@ -29,24 +29,26 @@ namespace Web.Controllers.V1
             public string userId { get; set; }
         }
 
-        public class CTaskForm
-        {
-            public int Id { get; set; }
-            public int Type { get; set; }
-            public string TypeName { get; set; }
-            public int BelongToProgress { get; set; }
-            public string BelongToProgressName { get; set; }
-            public string Name { get; set; }
-            public string BelongToLoginUser { get; set; }
-            public string BelongToLoginUserName { get; set; }
-            public string Description { get; set; }
-            public DateTime? CreateDate { get; set; }
-            public string CreateBy { get; set; }
-            public string CreateByName { get; set; }
-            public DateTime? UpdateDate { get; set; }
-            public string UpdateBy { get; set; }
-            public string UpdateByName { get; set; }
-        }
+        //public class CTaskForm
+        //{
+        //    public int Id { get; set; }
+        //    public int Priority { get; set; }
+        //    public string PriorityName { get; set; }
+        //    public int Type { get; set; }
+        //    public string TypeName { get; set; }
+        //    public int BelongToProgress { get; set; }
+        //    public string BelongToProgressName { get; set; }
+        //    public string Name { get; set; }
+        //    public string BelongToLoginUser { get; set; }
+        //    public string BelongToLoginUserName { get; set; }
+        //    public string Description { get; set; }
+        //    public DateTime? CreateDate { get; set; }
+        //    public string CreateBy { get; set; }
+        //    public string CreateByName { get; set; }
+        //    public DateTime? UpdateDate { get; set; }
+        //    public string UpdateBy { get; set; }
+        //    public string UpdateByName { get; set; }
+        //}
 
         [HttpPost]
         public IActionResult Query(
@@ -54,71 +56,13 @@ namespace Web.Controllers.V1
             [FromServices] DbContext _dbContext,
             [FromBody] QueryRequest request)
         {
-            var plist = _dbContext.Set<Model.Sqlite.ProgressType>().ToList();
-            var users = _dbContext.Set<Model.Sqlite.LoginUser>().ToList();
-            var types = _dbContext.Set<Model.Sqlite.FormType>().ToList();
-
             _service.SetBelongUser(request.userId);
             _service.SetAsignUser(null);
-            var belong = new List<CTaskForm>();
-            _service.Query().ToList()
-                .ForEach(p =>
-                {
-                    belong.Add(new CTaskForm
-                    {
-                        Id = p.Id,
-                        Type = p.Type,
-                        TypeName = types.Where(e => e.Id == p.Type).Any() ?
-                        types.Where(e => e.Id == p.Type).FirstOrDefault().Name : "",
-                        BelongToProgress = p.BelongToProgress,
-                        BelongToProgressName = plist.Where(e => e.Id == p.BelongToProgress).Any() ?
-                        plist.Where(e => e.Id == p.BelongToProgress).FirstOrDefault().Name : "",
-                        Name = p.Name,
-                        BelongToLoginUser = p.BelongToLoginUser,
-                        BelongToLoginUserName = users.Where(e => e.UserId == p.BelongToLoginUser).Any() ?
-                        users.Where(e => e.UserId == p.BelongToLoginUser).FirstOrDefault().Name : "",
-                        Description = p.Description,
-                        CreateDate = p.CreateDate,
-                        CreateBy = p.CreateBy,
-                        CreateByName = users.Where(e => e.UserId == p.CreateBy).Any() ?
-                        users.Where(e => e.UserId == p.CreateBy).FirstOrDefault().Name : "",
-                        UpdateDate = p.UpdateDate,
-                        UpdateBy = p.UpdateBy,
-                        UpdateByName = users.Where(e => e.UserId == p.UpdateBy).Any() ?
-                        users.Where(e => e.UserId == p.UpdateBy).FirstOrDefault().Name : "",
-                    });
-                });
+            var belong = _service.Query().ToList();
 
             _service.SetBelongUser(null);
             _service.SetAsignUser(request.userId);
-            var asign = new List<CTaskForm>();
-            _service.Query().ToList()
-                .ForEach(p =>
-                {
-                    asign.Add(new CTaskForm
-                    {
-                        Id = p.Id,
-                        Type = p.Type,
-                        TypeName = types.Where(e => e.Id == p.Type).Any() ?
-                        types.Where(e => e.Id == p.Type).FirstOrDefault().Name : "",
-                        BelongToProgress = p.BelongToProgress,
-                        BelongToProgressName = plist.Where(e => e.Id == p.BelongToProgress).Any() ?
-                        plist.Where(e => e.Id == p.BelongToProgress).FirstOrDefault().Name : "",
-                        Name = p.Name,
-                        BelongToLoginUser = p.BelongToLoginUser,
-                        BelongToLoginUserName = users.Where(e => e.UserId == p.BelongToLoginUser).Any() ?
-                        users.Where(e => e.UserId == p.BelongToLoginUser).FirstOrDefault().Name : "",
-                        Description = p.Description,
-                        CreateDate = p.CreateDate,
-                        CreateBy = p.CreateBy,
-                        CreateByName = users.Where(e => e.UserId == p.CreateBy).Any() ?
-                        users.Where(e => e.UserId == p.CreateBy).FirstOrDefault().Name : "",
-                        UpdateDate = p.UpdateDate,
-                        UpdateBy = p.UpdateBy,
-                        UpdateByName = users.Where(e => e.UserId == p.UpdateBy).Any() ?
-                        users.Where(e => e.UserId == p.UpdateBy).FirstOrDefault().Name : "",
-                    });
-                });
+            var asign = _service.Query().ToList();
 
             return this.Ok(new
             {
@@ -142,6 +86,8 @@ namespace Web.Controllers.V1
             public string userId { get; set; }
             [Required]
             public int type { get; set; }
+            [Required]
+            public int priority { get; set; }
         }
 
         [HttpPost]
@@ -155,7 +101,8 @@ namespace Web.Controllers.V1
                 request.description,
                 request.userId,
                 1,
-                request.type);
+                request.type,
+                request.priority);
 
             if (vo != null)
             {
@@ -206,6 +153,57 @@ namespace Web.Controllers.V1
             if (vo != null)
             {
                 return this.Ok();
+            }
+            else
+            {
+                return this.BadRequest();
+            }
+        }
+
+        public class ChangePriorityRequest
+        {
+            [Required]
+            public int id { get; set; }
+            [Required]
+            public int priorityNo { get; set; }
+        }
+
+        [HttpPost]
+        public IActionResult ChangePriority(
+            [FromServices] ITaskFormService _service,
+            [FromBody] ChangePriorityRequest request)
+        {
+            var vo = _service.ChangePriority(request.id, request.priorityNo);
+            if (vo != null)
+            {
+                return this.Ok();
+            }
+            else
+            {
+                return this.BadRequest();
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Commen(
+            [FromServices] DbContext _dbContext)
+        {
+            var users = _dbContext.Set<Model.Sqlite.LoginUser>().ToList();
+            var progress = _dbContext.Set<Model.Sqlite.ProgressType>().ToList();
+            var roles = _dbContext.Set<Model.Sqlite.RoleType>().ToList();
+            var prioritys = _dbContext.Set<Model.Sqlite.PriorityType>().ToList();
+            if (users.Any())
+            {
+                return this.Ok(new 
+                { 
+                    data = new 
+                    {
+                        users = users,
+                        progress = progress,
+                        roles = roles,
+                        prioritys = prioritys
+                    }
+                });
             }
             else
             {

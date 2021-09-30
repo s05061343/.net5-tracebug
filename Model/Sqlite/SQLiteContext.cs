@@ -14,6 +14,7 @@ namespace Model.Sqlite
         public virtual DbSet<LoginUser> LoginUser { get; set; }
         public virtual DbSet<RoleType> RoleType { get; set; }
         public virtual DbSet<FormType> FormType { get; set; }
+        public virtual DbSet<PriorityType> PriorityType { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseSqlite("Data Source=../Web/SQLiteDB.db");
@@ -23,11 +24,18 @@ namespace Model.Sqlite
             modelBuilder.Entity<ProgressType>()
                 .Property(f => f.Id)
                 .ValueGeneratedOnAdd();
-
             modelBuilder.Entity<ProgressType>().HasData(
                 new ProgressType { Id = 1, Name = "新任務" },
                 new ProgressType { Id = 2, Name = "進行中" },
                 new ProgressType { Id = 3, Name = "已完成" });
+
+            modelBuilder.Entity<PriorityType>()
+                .Property(f => f.Id)
+                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<PriorityType>().HasData(
+                new ProgressType { Id = 1, Name = "緊急" },
+                new ProgressType { Id = 2, Name = "優先" },
+                new ProgressType { Id = 3, Name = "一般" });
 
             modelBuilder.Entity<RoleType>().HasData(
                 new RoleType { Id = 1, Name = "QA" },
@@ -47,8 +55,6 @@ namespace Model.Sqlite
                 new LoginUser { UserId = "ts003", Password = "ts003", Name = "金城武", RoleNo = 2 },
                 new LoginUser { UserId = "ts004", Password = "ts004", Name = "彭于晏", RoleNo = 1 },
                 new LoginUser { UserId = "ts005", Password = "ts005", Name = "兆祐廷", RoleNo = 2 });
-
-
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿import { store } from 'react-notifications-component';
-import { apiUserLogin, apiAddTaskForm, apiQueryTaskForm, apiDeleteTaskForm, apiChangePrgressTaskForm, apiQueryAsignTaskForm } from '../../utils/api.js';
+import { apiUserLogin, apiAddTaskForm, apiQueryTaskForm, apiDeleteTaskForm, apiChangePrgressTaskForm, apiCommon, apiChangePriorityTaskForm } from '../../utils/api.js';
 
 export const actionCreators = {
     post: () => (dispatch, getState) => {
@@ -115,6 +115,7 @@ export const actionCreators = {
                 belongToLoginUser: appState.taskform_add.form.belongToLoginUser,
                 description: appState.taskform_add.form.description,
                 type: appState.taskform_add.form.type,
+                priority: appState.taskform_add.form.priority
             }
         });
     },
@@ -128,6 +129,7 @@ export const actionCreators = {
                 belongToLoginUser: user,
                 description: appState.taskform_add.form.description,
                 type: appState.taskform_add.form.type,
+                priority: appState.taskform_add.form.priority
             }
         });
     },
@@ -140,6 +142,7 @@ export const actionCreators = {
                 belongToLoginUser: appState.taskform_add.form.belongToLoginUser,
                 description: description,
                 type: appState.taskform_add.form.type,
+                priority: appState.taskform_add.form.priority
             }
         });
     },
@@ -152,6 +155,20 @@ export const actionCreators = {
                 belongToLoginUser: appState.taskform_add.form.belongToLoginUser,
                 description: appState.taskform_add.form.description,
                 type: type,
+                priority: appState.taskform_add.form.priority
+            }
+        });
+    },
+    addformPriority: (priority) => (dispatch, getState) => {
+        const appState = getState();
+        dispatch({
+            type: "ADD_FORM_PRIOROTY",
+            form: {
+                name: appState.taskform_add.form.name,
+                belongToLoginUser: appState.taskform_add.form.belongToLoginUser,
+                description: appState.taskform_add.form.description,
+                type: appState.taskform_add.form.type,
+                priority: priority
             }
         });
     },
@@ -164,6 +181,7 @@ export const actionCreators = {
             description: appState.taskform_add.form.description,
             userId: appState.loginUser.user.userId,
             type: appState.taskform_add.form.type,
+            priority: appState.taskform_add.form.priority,
         };
         console.log(json)
         apiAddTaskForm(json)
@@ -280,6 +298,47 @@ export const actionCreators = {
             .catch(err => { console.log(err); return; });
     },
 
+    postCommon: () => (dispatch, getState) => {
+        const appState = getState();
+        apiCommon({})
+            .then(res => {
+                console.log(res);
+                if (res.status === 200) {
+                    dispatch({
+                        type: "COMMON",
+                        users: JSON.parse(res.request.response).data.users,
+                        progress: JSON.parse(res.request.response).data.progress,
+                        roles: JSON.parse(res.request.response).data.roles,
+                        prioritys: JSON.parse(res.request.response).data.prioritys
+                    });
+                }
+            });
+    },
+
+    postFormChangePriority: (id, priorityNo) => (dispatch, getState) => {
+        const appState = getState();
+        const json = { id: id, priorityNo: priorityNo };
+        console.log(json)
+        apiChangePriorityTaskForm(json)
+            .then(res => {
+                console.log(res);
+                apiQueryTaskForm({ userId: appState.loginUser.user.userId })
+                    .then(res => {
+                        if (res.status === 200) {
+                            dispatch({
+                                type: "QUERY_FORM",
+                                formdata: {
+                                    belong: JSON.parse(res.request.response).data.belong,
+                                    asign: JSON.parse(res.request.response).data.asign
+                                }
+                            });
+                        }
+                    })
+                    .catch(err => { console.log(err); return; });
+            })
+            .catch(err => { console.log(err); return; });
+    },
+
 };
 
 export const reducer_loginUser = (loginUser, incomingAction) => {
@@ -327,6 +386,7 @@ export const reducer_taskform_add = (taskform_add, incomingAction) => {
         case 'ADD_FORM_USER':
         case 'ADD_FORM_DESCRIPTION':
         case 'ADD_FORM_TYPE':
+        case 'ADD_FORM_PRIOROTY':
             return {
                 form: incomingAction.form
             };
@@ -351,5 +411,27 @@ export const reducer_taskform_query = (taskform_query, incomingAction) => {
             };
         default:
             return taskform_query;
+    }
+};
+export const reducer_common = (common, incomingAction) => {
+    if (common === undefined) {
+        return {
+            users: [],
+            progress: [],
+            roles: [],
+            prioritys: []
+        };
+    }
+
+    switch (incomingAction.type) {
+        case 'COMMON':
+            return {
+                users: incomingAction.users,
+                progress: incomingAction.progress,
+                roles: incomingAction.roles,
+                prioritys: incomingAction.prioritys
+            };
+        default:
+            return common;
     }
 };

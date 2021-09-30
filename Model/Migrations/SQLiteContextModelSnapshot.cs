@@ -110,6 +110,37 @@ namespace Model.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Model.Sqlite.PriorityType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PriorityType");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "緊急"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "優先"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "一般"
+                        });
+                });
+
             modelBuilder.Entity("Model.Sqlite.ProgressType", b =>
                 {
                     b.Property<int>("Id")
@@ -199,6 +230,12 @@ namespace Model.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("PriorityName")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Type")

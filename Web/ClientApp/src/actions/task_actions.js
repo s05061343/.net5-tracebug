@@ -1,5 +1,5 @@
 ﻿import { store } from 'react-notifications-component';
-import { apiUserLogin, apiAddTaskForm, apiQueryTaskForm, apiDeleteTaskForm, apiChangePrgressTaskForm, apiCommon, apiChangePriorityTaskForm } from '../../utils/api.js';
+import { apiUserLogin, apiAddTaskForm, apiQueryTaskForm, apiDeleteTaskForm, apiChangePrgressTaskForm, apiCommon, apiChangePriorityTaskForm } from '../utils/api.js';
 
 export const actionCreators = {
     post: () => (dispatch, getState) => {

@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { connect } from 'react-redux';
-import * as store from '../Login/Login.js';
+import * as store from '../../actions/task_actions.js';
 
 import '../../css/signin.css';
 
@@ -16,12 +16,12 @@ class Login extends React.PureComponent {
                             <div className="form-floating">
                                 <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com"
                                     onChange={(e) => { this.props.setUserId(e.target.value); }} />
-                                <label htmlFor="floatingInput">Email address</label>
+                                {/*<label htmlFor="floatingInput">Email address</label>*/}
                             </div>
                             <div className="form-floating">
                                 <input type="password" className="form-control" id="floatingPassword" placeholder="Password"
                                     onChange={(e) => { this.props.setPassword(e.target.value); }} />
-                                <label htmlFor="floatingPassword">Password</label>
+                                {/*<label htmlFor="floatingPassword">Password</label>*/}
                             </div>
                             <div className="checkbox mb-3">
                             </div>

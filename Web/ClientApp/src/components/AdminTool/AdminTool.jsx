@@ -1,9 +1,9 @@
 ﻿import * as React from 'react';
 import { connect } from 'react-redux';
 
-const Home = () => (
+const AdminTool = () => (
     <div className="container-fluid">
     </div>
 );
 
-export default connect()(Home);
+export default connect()(AdminTool);

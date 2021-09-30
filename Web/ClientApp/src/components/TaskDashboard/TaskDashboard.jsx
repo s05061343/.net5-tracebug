@@ -1,7 +1,7 @@
 ﻿import * as React from 'react';
 import { connect } from 'react-redux';
-import * as store from '../Login/Login.js';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import * as store from '../../actions/task_actions.js';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 
 class TaskDashboard extends React.PureComponent {
     state = {

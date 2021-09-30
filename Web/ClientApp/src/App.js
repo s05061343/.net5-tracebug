@@ -8,9 +8,9 @@ import ReactNotification from 'react-notifications-component'
 
 // Layouts
 import Layout from './components/Layout.jsx';
-import Home from './components/Home/Home.jsx';
+import AdminTool from './components/AdminTool/AdminTool.jsx';
 import Login from './components/Login/Login.jsx';
-import MyTask from './components/Login/MyTask.jsx';
+import TaskDashboard from './components/TaskDashboard/TaskDashboard.jsx';
 import NotFound from './components/Error/NotFound.jsx';
 import Unauthorized from './components/Error/Unauthorized.jsx';
 
@@ -23,12 +23,12 @@ export default () => (
         <BrowserRouter>
             <Layout>
                 <Switch>
-                    <AuthorizedRoute exact path="/home" component={Home} />
+                    <AuthorizedRoute path="/admintool" component={AdminTool} />
                     <AuthorizedRoute path="/login" component={Login} />
-                    <AuthorizedRoute path="/" component={MyTask} />
+                    <AuthorizedRoute path="/taskdashboard" component={TaskDashboard} />
                     <AuthorizedRoute path="/unauthorized" component={Unauthorized} />
                     <Route path="/notfound" component={NotFound} />
-                    <Redirect to="/" />
+                    <Redirect to="/taskdashboard" />
                 </Switch>
             </Layout>
         </BrowserRouter>

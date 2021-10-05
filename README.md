@@ -1,4 +1,19 @@
-# .net5-tracebug
+# .net5-trace-bug
+
+> 範例網址 :  [https://tomz-trace-bug.herokuapp.com/taskdashboard](https://tomz-trace-bug.herokuapp.com/taskdashboard)
+> 
+
+測試帳號密碼如下:
+
+```csharp
+LoginUser { UserId = "admin", Password = "admin", Name = "管理員", RoleNo = 4 },
+LoginUser { UserId = "ts001", Password = "ts001", Name = "王曉明", RoleNo = 1 },
+LoginUser { UserId = "ts002", Password = "ts002", Name = "劉俊麟", RoleNo = 3 },
+LoginUser { UserId = "ts003", Password = "ts003", Name = "金城武", RoleNo = 2 },
+LoginUser { UserId = "ts004", Password = "ts004", Name = "彭于晏", RoleNo = 1 },
+LoginUser { UserId = "ts005", Password = "ts005", Name = "兆祐廷", RoleNo = 2 });
+```
+
 ## Phase I Requirement:
 
 LoginUser 需要區分身分(RD，QA)

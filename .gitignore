@@ -7,3 +7,7 @@
 /Service/obj
 /UnitTest/bin
 /UnitTest/obj
+
+.vs/
+
+Web/ClientApp/package-lock.json
